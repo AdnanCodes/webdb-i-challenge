@@ -44,12 +44,20 @@ server.put("/:id", (req, res) => {
     .where({ id: req.params.id })
     .update(changes)
     .then(count => {
-      res.status(200).json({ RecordUpdated: count });
+      res.status(202).json({ RecordUpdated: count });
     })
     .catch(err => res.json(err));
 });
 
-server.delete("/:id", (req, res) => {});
+server.delete("/:id", (req, res) => {
+  db("accounts")
+    .where({ id: req.params.id })
+    .del()
+    .then(count => {
+      res.status(200).json({ RecordsDeleted: count });
+    })
+    .catch(err => res.json(err));
+});
 
 function ValidateResource(req, res, next) {
   if (req.body.name === undefined) {
