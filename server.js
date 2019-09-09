@@ -23,7 +23,19 @@ server.get("/:id", (req, res) => {
     .catch(err => res.json(err));
 });
 
-server.post("/", ValidateResource, (req, res) => {});
+server.post("/", ValidateResource, (req, res) => {
+  const postData = req.body;
+  console.log(postData);
+  db("accounts")
+    .insert(postData, "id")
+    .then(([id]) => {
+      db("accounts")
+        .where({ id })
+        .first()
+        .then(res.status(201).json(id));
+    })
+    .catch(err => res.json(err));
+});
 
 server.put("/:id", (req, res) => {});
 
